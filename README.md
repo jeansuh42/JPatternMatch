@@ -1,6 +1,6 @@
 # JPatternMatch
 
-[![GitHub license](https://img.shields.io/npm/l/ts-pattern.svg)](https://github.com/jeansuh42/JPatterMatch/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/npm/l/ts-pattern.svg)](https://github.com/jeansuh42/JPatternMatch/blob/main/LICENSE)
 
 ### Use Pattern Matching at Java 1.8
 
