@@ -1,4 +1,4 @@
-package src.main.java.org.jpatternmatch;
+package org.jpatternmatch;
 
 import java.util.function.Function;
 
