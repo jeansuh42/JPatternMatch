@@ -2,22 +2,70 @@ package org.jpatternmatch;
 
 import java.util.function.Function;
 
-public class JPatternMatch {
+public class JPatternMatch<T> {
+
+    private boolean matched = false;
+    private T result;
+    private Object ctorInstance;
+
+    private JPatternMatch(Object ctorInstance) {
+        this.ctorInstance = ctorInstance;
+    }
 
 
-    public static <T, R> R asTypeOf(Object instance, Class<T> clazz, Function<T, R> func) {
-        if (clazz.isInstance(instance)) {
-            return func.apply(clazz.cast(instance));
+    public static <T, R> R asTypeOf(Object injectedInstance, Class<T> clazz, Function<T, R> func) {
+        if (clazz.isInstance(injectedInstance)) {
+            return func.apply(clazz.cast(injectedInstance));
         }
         throw new ClassCastException("타입 매칭에 실패했습니다.");
     }
 
-    public static <T> void asTypeOf(Object instance, Class<T> clazz, Runnable func) {
-        if (clazz.isInstance(instance)) {
+    public static <T> void asTypeOf(Object injectedInstance, Class<T> clazz, Runnable func) {
+        if (clazz.isInstance(injectedInstance)) {
             func.run();
         }
     }
 
+    public static <T> JPatternMatch<T> of(Object injectedInstance) {
+        return new JPatternMatch<>(injectedInstance);
+    }
+
+    public JPatternMatch<T> match() {
+        return this;
+    }
+
+//    public JPatternMatch<T> with(Object condition, Supplier<? extends T> supplier) {
+//        if (condition.equals(this.ctorInstance)) {
+//            this.result = supplier.get();
+//        }
+//        return this;
+//    }
+
+    public JPatternMatch<T> with(Object condition, Runnable action) {
+        if (!matched && condition.equals(this.ctorInstance)) {
+            action.run();
+            matched = true;
+        }
+        return this;
+    }
+
+    public JPatternMatch<T> otherwise(Runnable action) {
+        if (!matched) {
+            action.run();
+        }
+        return this;
+    }
+
+//    public JPatternMatch<T> otherwise(Supplier<? extends T> supplier) {
+//        if (this.result == null) {
+//            this.result = supplier.get();
+//        }
+//        return this;
+//    }
+
+    public T end() {
+        return this.result;
+    }
 
 
 }
