@@ -10,15 +10,56 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Match 메서드 테스트")
 public class MatchTests {
 
+    @Test
+    @DisplayName("Map 객체 매칭 로직이 적절한 조건의 호출 여부를 확인한다")
+    void testMapMatching() {
+
+        // given
+        Map<String, String> keyValueObject = new HashMap<>();
+        keyValueObject.put("key1", "type");
+        keyValueObject.put("key2", "type2");
+
+        List<Boolean> executionFlags = Arrays.asList(false, false, false, false);
+
+        // when
+        Map result = JPatternMatch.of(keyValueObject)
+                .returnObject(Map.class)
+                .with(createKeyValueMap("key1", "type", "key2", "type3"), () -> {
+                    executionFlags.set(0, true);
+                    return createKeyValueMap("key1", "type", "key2", "type3");
+                })
+                .with(createKeyValueMap("key1", "type", "key2", "type2"), () -> {
+                    executionFlags.set(1, true);
+                    return createKeyValueMap("key1", "type", "key2", "type2");
+                })
+                .with(keyValueObject, () -> {
+                    executionFlags.set(2, true);
+                    return keyValueObject;
+                })
+                .otherwise(() -> {
+                    executionFlags.set(3, true);
+                    return createKeyValueMap("default", "default", "default", "default");
+                })
+                .end();
+
+        // then
+        assertFalse(executionFlags.get(0));
+        assertTrue(executionFlags.get(1));
+        assertFalse(executionFlags.get(2));
+        assertFalse(executionFlags.get(3));
+
+        assertEquals(result, keyValueObject);
+        assertEquals(result, createKeyValueMap("key1", "type", "key2", "type2"));
+    }
+
 
     @Test
-    @DisplayName("동일 객체 주입 시 System 함수 호출 여부를 확인합니다.")
+    @DisplayName("동일 객체 주입 시 System 함수 호출 여부를 확인한다.")
     void testSysoutMatchingPatterns() {
         // given
         Map<String, String> keyValueObject = new HashMap<>();
@@ -60,7 +101,7 @@ public class MatchTests {
 
 
     @Test
-    @DisplayName("Map 동일 객체 주입 시 적합한 조건의 호출 여부를 확인합니다.")
+    @DisplayName("Map 동일 객체 주입 시 적합한 조건의 호출 여부를 확인한다.")
     void testMapMatchingPatterns() {
         // given
         Map<String, String> keyValueObject = new HashMap<>();
@@ -88,7 +129,7 @@ public class MatchTests {
 
 
     @Test
-    @DisplayName("String 동일 객체 주입 시 적합한 조건의 호출 여부를 확인합니다.")
+    @DisplayName("String 동일 객체 주입 시 적합한 조건의 호출 여부를 확인한다.")
     void testStringMatchingPatterns() {
         // given
         Map<String, String> keyValueObject = new HashMap<>();
