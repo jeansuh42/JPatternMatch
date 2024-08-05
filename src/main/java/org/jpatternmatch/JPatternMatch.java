@@ -9,7 +9,7 @@ public class JPatternMatch {
         if (clazz.isInstance(instance)) {
             return func.apply(clazz.cast(instance));
         }
-        throw new ClassCastException("Instance is not of the expected type: " + clazz.getName());
+        throw new ClassCastException("타입 매칭에 실패했습니다.");
     }
 
     public static <T> void asTypeOf(Object instance, Class<T> clazz, Runnable func) {

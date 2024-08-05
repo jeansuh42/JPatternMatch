@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.jpatternmatch.JPatternMatch.asTypeOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("asTypeOf 메서드 테스트")
@@ -16,7 +18,7 @@ class AsTypeOfTests {
 
         // given / when
         boolean[] nullMatched = {false};
-        JPatternMatch.asTypeOf(null, String.class, () -> {
+        asTypeOf(null, String.class, () -> {
             nullMatched[0] = true;
         });
 
@@ -31,7 +33,7 @@ class AsTypeOfTests {
 
         // given / when
         boolean[] doubleMatched = {false};
-        JPatternMatch.asTypeOf(2.0, Double.class, () -> {
+        asTypeOf(2.0, Double.class, () -> {
             doubleMatched[0] = true;
         });
 
@@ -45,7 +47,7 @@ class AsTypeOfTests {
 
         // given / when
         boolean[] booleanMatched = {false};
-        JPatternMatch.asTypeOf(true, Boolean.class, () -> {
+        asTypeOf(true, Boolean.class, () -> {
             booleanMatched[0] = true;
         });
 
@@ -60,7 +62,7 @@ class AsTypeOfTests {
 
         // given / when
         boolean[] listMatched = {false};
-        JPatternMatch.asTypeOf(Arrays.asList(1, 2, 3), List.class, () -> {
+        asTypeOf(Arrays.asList(1, 2, 3), List.class, () -> {
             listMatched[0] = true;
         });
 
@@ -75,7 +77,7 @@ class AsTypeOfTests {
 
         // given / when
         boolean[] callbackExecuted = {false};
-        JPatternMatch.asTypeOf(2, String.class, () -> {
+        asTypeOf(2, String.class, () -> {
             callbackExecuted[0] = true;
         });
 
@@ -95,7 +97,7 @@ class AsTypeOfTests {
         }
 
         boolean[] objectMatched = {false};
-        JPatternMatch.asTypeOf(new CustomObject("test"), CustomObject.class, () -> {
+        asTypeOf(new CustomObject("test"), CustomObject.class, () -> {
             objectMatched[0] = true;
         });
 
@@ -110,8 +112,8 @@ class AsTypeOfTests {
 
         // given / when
         boolean[] nestedMatched = {false};
-        JPatternMatch.asTypeOf(2, Integer.class, () -> {
-            JPatternMatch.asTypeOf("string", String.class, () -> {
+        asTypeOf(2, Integer.class, () -> {
+            asTypeOf("string", String.class, () -> {
                 nestedMatched[0] = true;
             });
         });
@@ -120,4 +122,48 @@ class AsTypeOfTests {
         assertTrue(nestedMatched[0]);
 
     }
+
+    @Test
+    @DisplayName("asTypeOf 인자의 함수가 잘못된 타입을 반환할 경우 예외가 발생하는지 테스트한다.")
+    public void testAsTypeOfWithInvalidType() {
+
+        Integer input = 123;
+        ClassCastException exception = assertThrows(ClassCastException.class, () -> {
+            asTypeOf(input, String.class, Integer::parseInt);
+        });
+
+        assertTrue(exception.getMessage().contains("타입 매칭에 실패했습니다."));
+    }
+
+    @Test
+    @DisplayName("Integer 타입 변환 시 asTypeOf 수행 및 반환값이 올바른지 테스트한다.")
+    public void testAsTypeOfWithValidType() {
+
+        String input = "123";
+        Integer result = asTypeOf(input, String.class, Integer::parseInt);
+
+        assertEquals(123, result);
+    }
+
+    @Test
+    @DisplayName("Double 타입 변환 시 asTypeOf 수행 및 반환값이 올바른지 테스트한다.")
+    public void testAsTypeOfWithDoubleType() {
+
+        Double input = 3.14;
+        String result = asTypeOf(input, Double.class, String::valueOf);
+
+        assertEquals("3.14", result);
+    }
+
+    @Test
+    @DisplayName("Double 타입 변환 시 asTypeOf 수행 및 반환값이 올바른지 테스트한다.")
+    public void testAsTypeOfWithFloatType() {
+
+        Float input = 3.14f;
+        String result = asTypeOf(input, Float.class, String::valueOf);
+
+        assertEquals("3.14", result);
+    }
 }
+
+
