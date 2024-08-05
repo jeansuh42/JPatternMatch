@@ -1,5 +1,7 @@
 package org.jpatternmatch;
 
+import org.jpatternmatch.common.PatternMatchException;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -68,6 +70,13 @@ public class JPatternMatch<T> {
         return this.result;
     }
 
+
+    public T exhaustive() throws PatternMatchException {
+        if (this.result == null || !result.getClass().equals(ctorInstance.getClass())) {
+            throw new PatternMatchException("패턴과 일치하는 타입이 없습니다.");
+        }
+        return this.result;
+    }
 
 
 }
