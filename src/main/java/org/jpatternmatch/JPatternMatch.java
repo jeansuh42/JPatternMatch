@@ -55,11 +55,10 @@ public class JPatternMatch<T> {
         return this;
     }
 
-    public T otherwise(Runnable action) {
+    public void otherwise(Runnable action) {
         if (!matched) {
             action.run();
         }
-        return this.result;
     }
 
     public T otherwise(Supplier<? extends T> supplier) {
@@ -68,8 +67,7 @@ public class JPatternMatch<T> {
         }
         return this.result;
     }
-    
-    
+
 
 
 }
