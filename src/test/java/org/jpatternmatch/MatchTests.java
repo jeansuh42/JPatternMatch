@@ -44,8 +44,7 @@ public class MatchTests {
                 .otherwise(() -> {
                     executionFlags.set(3, true);
                     return createKeyValueMap("default", "default", "default", "default");
-                })
-                .end();
+                });
 
         // then
         assertFalse(executionFlags.get(0));
@@ -85,8 +84,7 @@ public class MatchTests {
                     })
                     .otherwise(() -> {
                         System.out.println("기본 매치 실행");
-                    })
-                    .end();
+                    });
 
             // then
             String output = outContent.toString();
@@ -116,8 +114,7 @@ public class MatchTests {
                 .with(createKeyValueMap("key1", "type", "key2", "type3"), () -> executionFlags.set(0, true))
                 .with(createKeyValueMap("key1", "type", "key2", "type4"), () -> executionFlags.set(1, true))
                 .with(createKeyValueMap("key1", "type", "key2", "type5"), () -> executionFlags.set(2, true))
-                .otherwise(() -> executionFlags.set(3, true))
-                .end();
+                .otherwise(() -> executionFlags.set(3, true));
 
         // then
         assertFalse(executionFlags.get(0));
@@ -144,8 +141,7 @@ public class MatchTests {
                 .with(createKeyValueMap("key1", "type", "key2", "type3"), () -> executionFlags.set(0, true))
                 .with(createKeyValueMap("key1", "type", "key2", "type4"), () -> executionFlags.set(1, true))
                 .with(createKeyValueMap("key1", "type", "key2", "type5"), () -> executionFlags.set(2, true))
-                .otherwise(() -> executionFlags.set(3, true))
-                .end();
+                .otherwise(() -> executionFlags.set(3, true));
 
         // then
         assertFalse(executionFlags.get(0));

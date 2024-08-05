@@ -55,23 +55,21 @@ public class JPatternMatch<T> {
         return this;
     }
 
-    public JPatternMatch<T> otherwise(Runnable action) {
+    public T otherwise(Runnable action) {
         if (!matched) {
             action.run();
         }
-        return this;
+        return this.result;
     }
 
-    public JPatternMatch<T> otherwise(Supplier<? extends T> supplier) {
+    public T otherwise(Supplier<? extends T> supplier) {
         if (this.result == null) {
             this.result = supplier.get();
         }
-        return this;
-    }
-
-    public T end() {
         return this.result;
     }
+    
+    
 
 
 }
