@@ -9,6 +9,19 @@ public class MatchExample {
 
     public static void main(String[] args) {
 
+        /*
+         * You can use an expression lambda as well,
+         * but sometimes a statement lambda is much more readable,
+         * especially when the condition is too long.
+         */
+        JPatternMatch.of(2.0)
+                .match()
+                .with(Double.valueOf(1.2) + Double.valueOf(3.8) + Double.valueOf(7.2), () -> {
+                    System.out.println("DeeperTestClass 타입 매칭");
+                })
+                .otherwise(() -> System.out.println("Double 타입 매칭 실패"));
+
+
         // 예제 1: null 값 매칭
         try{
             Object nullObject = null;
