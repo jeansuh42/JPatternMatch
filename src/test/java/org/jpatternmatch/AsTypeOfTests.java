@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.jpatternmatch.JPatternMatch.asTypeOf;
+import static org.jpatternmatch.src.JPatternMatch.asTypeOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("asTypeOf 메서드 테스트")
@@ -16,14 +16,14 @@ class AsTypeOfTests {
     @DisplayName("주입된 값이 null일 때 테스트한다.")
     void testNullValue() {
 
-        // given / when
+        // given
         boolean[] nullMatched = {false};
-        asTypeOf(null, String.class, () -> {
-            nullMatched[0] = true;
-        });
 
         // then
-        assertFalse(nullMatched[0]);
+        assertThrows(IllegalArgumentException.class, () -> {
+            // when
+            asTypeOf(null, String.class, () -> nullMatched[0] = true);
+        });
 
     }
 
