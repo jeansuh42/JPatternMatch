@@ -1,4 +1,4 @@
-package org.jpatternmatch.src.common;
+package org.jpatternmatch.common;
 
 public class PatternMatchException extends Exception{
 

@@ -1,4 +1,4 @@
-package org.jpatternmatch.src;
+package org.jpatternmatch;
 
 import java.util.ArrayList;
 import java.util.Collections;

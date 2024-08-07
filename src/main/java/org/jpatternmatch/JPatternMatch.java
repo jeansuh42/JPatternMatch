@@ -1,7 +1,7 @@
-package org.jpatternmatch.src;
+package org.jpatternmatch;
 
-import org.jpatternmatch.src.common.PatternMatchException;
-import static org.jpatternmatch.src.ArgCheck.*;
+import org.jpatternmatch.common.PatternMatchException;
+import static org.jpatternmatch.ArgCheck.*;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
