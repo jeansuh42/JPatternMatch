@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.jpatternmatch.JPatternMatch.asTypeOf;
+import static org.jpatternmatch.src.JPatternMatch.asTypeOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("asTypeOf 메서드 테스트")
