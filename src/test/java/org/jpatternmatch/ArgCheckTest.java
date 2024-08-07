@@ -12,9 +12,7 @@ public class ArgCheckTest {
     @Test
     @DisplayName("checkArgumentNonNullAndReturn이 null 입력 시 IllegalArgumentException을 던지는지 확인한다.")
     void testCheckAndEnsureArgumentNonNullWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            ArgCheck.checkArgumentNonNullAndReturn(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> ArgCheck.checkArgumentNonNullAndReturn(null));
     }
 
     @Test
@@ -33,9 +31,7 @@ public class ArgCheckTest {
     @Test
     @DisplayName("requireArguemntNonNull이 null 입력 시 IllegalArgumentException을 던지는지 확인한다.")
     void testRequireArguemntNonNullWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            ArgCheck.requireArguemntNonNull(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> ArgCheck.requireArguemntNonNull(null));
     }
 
     @Test
@@ -51,9 +47,7 @@ public class ArgCheckTest {
     @Test
     @DisplayName("requireArguemntsNonNull이 null 객체가 포함된 입력 시 IllegalArgumentException을 던지는지 확인한다.")
     void testRequireArguemntsNonNullWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            ArgCheck.requireArguemntsNonNull("Not Null", null, "Not Null");
-        });
+        assertThrows(IllegalArgumentException.class, () -> ArgCheck.requireArguemntsNonNull("Not Null", null, "Not Null"));
     }
 
     @Test
