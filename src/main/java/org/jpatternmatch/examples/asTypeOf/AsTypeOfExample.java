@@ -5,7 +5,7 @@ import java.util.List;
 
 import static org.jpatternmatch.src.JPatternMatch.asTypeOf;
 
-public class asTypeOfExample {
+public class AsTypeOfExample {
 
     public static void main(String[] args) {
 
