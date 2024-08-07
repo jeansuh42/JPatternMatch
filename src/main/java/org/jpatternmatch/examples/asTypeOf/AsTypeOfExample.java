@@ -11,7 +11,7 @@ public class AsTypeOfExample {
 
         /*
          * You can use an expression lambda as well,
-         * but a statement lambda is much more readable
+         * but sometimes a statement lambda is much more readable
          * when using this library.
          */
         asTypeOf(1, Integer.class, () -> System.out.println("expression lambda"));
