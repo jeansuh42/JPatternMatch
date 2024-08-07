@@ -156,7 +156,7 @@ class AsTypeOfTests {
     }
 
     @Test
-    @DisplayName("Double 타입 변환 시 asTypeOf 수행 및 반환값이 올바른지 테스트한다.")
+    @DisplayName("Float 타입 변환 시 asTypeOf 수행 및 반환값이 올바른지 테스트한다.")
     public void testAsTypeOfWithFloatType() {
 
         Float input = 3.14f;
@@ -164,6 +164,69 @@ class AsTypeOfTests {
 
         assertEquals("3.14", result);
     }
+
+
+    // Inner class for Test
+    class TestClass {
+        String value;
+        NestedTestClass nestedTestClass;
+
+        TestClass(String value, NestedTestClass nestedTestClass) {
+            this.value = value;
+            this.nestedTestClass = nestedTestClass;
+        }
+    }
+
+    class NestedTestClass {
+        String nestedValue;
+        DeeperTestClass deeperTestClass;
+
+        NestedTestClass(String nestedValue, DeeperTestClass deeperTestClass) {
+            this.nestedValue = nestedValue;
+            this.deeperTestClass = deeperTestClass;
+        }
+    }
+
+    class DeeperTestClass {
+        String deeperNestedValue;
+
+        DeeperTestClass(String deeperNestedValue) {
+            this.deeperNestedValue = deeperNestedValue;
+        }
+    }
+
+    @Test
+    @DisplayName("사용자 정의 중첩 타입 확인 시 asTypeOf 수행 및 반환값이 올바른지 테스트한다.")
+    public void testAsTypeUserDefinedNestedClass() {
+
+
+        //given
+        boolean[] nestedMatched = {true, true, true};
+        TestClass testObject = new TestClass("testValue", null);
+        NestedTestClass nestedObject = new NestedTestClass("nestedValue", null);
+        nestedObject.deeperTestClass = new DeeperTestClass("deepValue");
+        testObject.nestedTestClass = nestedObject;
+
+        //when
+        asTypeOf(testObject, TestClass.class, () -> {
+            nestedMatched[0] = true;
+        });
+
+        asTypeOf(testObject.nestedTestClass, NestedTestClass.class, () -> {
+            nestedMatched[1] = true;
+        });
+
+        asTypeOf(testObject.nestedTestClass.deeperTestClass, DeeperTestClass.class, () -> {
+            nestedMatched[2] = true;
+        });
+
+
+        // then
+        assertTrue(nestedMatched[0]);
+        assertTrue(nestedMatched[1]);
+        assertTrue(nestedMatched[2]);
+    }
+
 }
 
 
