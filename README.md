@@ -18,7 +18,9 @@ Now that you've encountered JPatternMatch, you can start using pattern matching 
 #### Java
 
 ```groovy
-
+dependencies {
+    implementation 'com.github.jeansuh42:JPatternMatch:0.1.1'
+}
 ```
 
 ### Maven
@@ -27,20 +29,19 @@ Now that you've encountered JPatternMatch, you can start using pattern matching 
 
 ```xml
 <dependency>
-    <groupId>com.beeniyxz.jpattermatch</groupId>
-    <artifactId>jpattern-match-starter</artifactId>
-    <version>1.0.0</version>
+    <groupId>com.github.jeansuh42</groupId>
+    <artifactId>JPatternMatch</artifactId>
+    <version>0.1.1</version>
 </dependency>
 ```
 
 ## Documentation
-* [문서 - 작성 예정]()
+* [How to Use JPatternMatch](https://github.com/jeansuh42/JPatternMatch/wiki/How-to-Use-JPatternMatch)
+* [Example Code](https://github.com/jeansuh42/JPatternMatch/tree/main/src/examples)
 
 ## Contributors
 * 🗝️ [Jean Suh](https://github.com/jeansuh42)
 
-## Articles
-* [How to Use JPatternMatch Effectively and Elegantly - 작성 예정]()
 
 ## License
 

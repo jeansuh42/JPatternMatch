@@ -15,7 +15,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.mockito:mockito-core:3.9.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.9.0'
-    implementation 'com.github.jeansuh42:JPatternMatch:0.1'
+    implementation 'com.github.jeansuh42:JPatternMatch:0.1.1'
 }
 
 test {
