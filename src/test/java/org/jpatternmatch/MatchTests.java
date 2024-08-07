@@ -1,6 +1,7 @@
 package org.jpatternmatch;
 
-import org.jpatternmatch.common.PatternMatchException;
+import org.jpatternmatch.src.JPatternMatch;
+import org.jpatternmatch.src.common.PatternMatchException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package org.jpatternmatch;
+package org.jpatternmatch.src;
 
 public class Main {
     public static void main(String[] args) {
