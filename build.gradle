@@ -7,6 +7,7 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -14,7 +15,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.mockito:mockito-core:3.9.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.9.0'
-    implementation 'org.springframework.boot:spring-boot-starter-aop:2.5.4'
+    implementation 'com.github.jeansuh42:JPatternMatch:0.1'
 }
 
 test {
