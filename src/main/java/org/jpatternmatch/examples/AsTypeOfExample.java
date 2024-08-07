@@ -1,4 +1,4 @@
-package org.jpatternmatch.examples.asTypeOf;
+package org.jpatternmatch.examples;
 
 import java.util.Arrays;
 import java.util.List;
