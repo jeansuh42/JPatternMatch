@@ -12,14 +12,28 @@ public class ArgCheckTest {
     @Test
     @DisplayName("checkArgumentNonNullAndReturn이 null 입력 시 IllegalArgumentException을 던지는지 확인한다.")
     void testCheckAndEnsureArgumentNonNullWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> ArgCheck.checkArgumentNonNullAndReturn(null));
+
+        // given
+        String input = null;
+
+        // then
+        assertThrows(IllegalArgumentException.class, () -> {
+            // when
+            ArgCheck.checkArgumentNonNullAndReturn(input);
+        });
+
     }
 
     @Test
     @DisplayName("checkArgumentNonNullAndReturn이 null이 아닌 입력 시 동일 객체를 반환하는지 확인한다.")
     void testCheckAndEnsureArgumentNonNullWithNonNull() {
-        String testString = "test";
-        assertEquals(testString, ArgCheck.checkArgumentNonNullAndReturn(testString));
+
+        // given
+        String input = "test";
+
+        // then / when
+        assertEquals(input, ArgCheck.checkArgumentNonNullAndReturn(input));
+
     }
 
     @Test
@@ -31,7 +45,16 @@ public class ArgCheckTest {
     @Test
     @DisplayName("requireArguemntNonNull이 null 입력 시 IllegalArgumentException을 던지는지 확인한다.")
     void testRequireArguemntNonNullWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> ArgCheck.requireArguemntNonNull(null));
+
+        // given
+        String input = null;
+
+        // then
+        assertThrows(IllegalArgumentException.class, () -> {
+            // when
+            ArgCheck.requireArguemntNonNull(input);
+        });
+
     }
 
     @Test
@@ -47,7 +70,14 @@ public class ArgCheckTest {
     @Test
     @DisplayName("requireArguemntsNonNull이 null 객체가 포함된 입력 시 IllegalArgumentException을 던지는지 확인한다.")
     void testRequireArguemntsNonNullWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> ArgCheck.requireArguemntsNonNull("Not Null", null, "Not Null"));
+
+        // given
+        Object[] input = new Object[]{"Not Null", null, "Not Null"};
+
+        // then / when
+        assertThrows(IllegalArgumentException.class, () -> {
+            ArgCheck.requireArguemntsNonNull(input);
+        });
     }
 
     @Test
