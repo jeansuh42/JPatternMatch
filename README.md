@@ -19,7 +19,7 @@ Now that you've encountered JPatternMatch, you can start using pattern matching 
 
 ```groovy
 dependencies {
-    implementation 'com.github.jeansuh42:JPatternMatch:0.1.1'
+    implementation 'com.github.jeansuh42:JPatternMatch:0.1.2'
 }
 ```
 
@@ -31,7 +31,7 @@ dependencies {
 <dependency>
     <groupId>com.github.jeansuh42</groupId>
     <artifactId>JPatternMatch</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 
