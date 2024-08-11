@@ -1,4 +1,4 @@
-package org.jpatternmatch.examples;
+package org.example;
 
 import org.jpatternmatch.src.JPatternMatch;
 import org.jpatternmatch.src.common.PatternMatchException;
