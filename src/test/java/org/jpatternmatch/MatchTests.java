@@ -156,6 +156,7 @@ public class MatchTests {
     @DisplayName("exhaustive 종료 함수일 때 반환하는 객체가 존재하고, 지정한 타입과 일치할 시의 성공 여부를 확인한다.")
     void testExhaustiveHappyCase() throws PatternMatchException {
 
+        int a = 3;
         // given
         Map<String, String> keyValueObject = new HashMap<>();
         keyValueObject.put("key1", "type");
@@ -223,6 +224,31 @@ public class MatchTests {
     }
 
 
+    @Test
+    @DisplayName("exhaustive 종료 함수일 때  성공 여부를 확인한다.")
+    void testExhaustiveWhenHappy() {
+
+        // given
+        Map<String, String> keyValueObject = new HashMap<>();
+        keyValueObject.put("key1", "type");
+        keyValueObject.put("key2", "type2");
+
+        List<Boolean> executionFlags = Arrays.asList(false, false, false);
+
+        // when
+        assertDoesNotThrow(() -> {
+            JPatternMatch.of(keyValueObject)
+                    .match()
+                    .with(createKeyValueMap("key1", "type", "key2", "type2"), () -> executionFlags.set(0, true))
+                    .with(createKeyValueMap("key1", "type", "key2", "type4"), () -> executionFlags.set(1, true))
+                    .with(createKeyValueMap("key1", "type", "key2", "type5"), () -> executionFlags.set(2, true))
+                    .exhaustive();
+        });
+
+        // then
+        assertTrue(executionFlags.get(0));
+
+    }
 
     private Map<String, String> createKeyValueMap(String key1, String value1, String key2, String value2) {
         Map<String, String> map = new HashMap<>();
