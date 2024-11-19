@@ -1,31 +1,23 @@
 package org.jpatternmatch;
 
 import org.jpatternmatch.common.PatternMatchException;
-import static org.jpatternmatch.ArgCheck.*;
 
+import java.lang.reflect.Field;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
+
+import static org.jpatternmatch.ArgCheck.requireArguemntNonNull;
+import static org.jpatternmatch.ArgCheck.requireArguemntsNonNull;
 
 public class JPatternMatch<T> {
 
+    private final T result;
     private boolean matched = false;
-    private T result;
-    private Object ctorInstance;
 
-    private JPatternMatch(Object ctorInstance) {
-        this.ctorInstance = checkArgumentNonNullAndReturn(ctorInstance);
+    private JPatternMatch(T ctorInstance) {
+        this.result = ctorInstance;
     }
 
-    /**
-     * Check the type of parameter instance
-     *
-     * @param injectedInstance the object to check the type of
-     * @param clazz the class type to compare against
-     * @param func a function for return
-     * @return the result of applying the function
-     * @throws IllegalArgumentException if any argument is null
-     * @throws ClassCastException if the type does not match
-     */
     public static <T, R> R asTypeOf(Object injectedInstance, Class<T> clazz, Function<T, R> func) {
 
         requireArguemntsNonNull(injectedInstance, clazz, func);
@@ -36,14 +28,6 @@ public class JPatternMatch<T> {
         throw new ClassCastException("타입 매칭에 실패했습니다.");
     }
 
-    /**
-     * Check the type of parameter instance
-     *
-     * @param injectedInstance the object to check for type
-     * @param clazz the class type to compare against
-     * @param action a runnable action to execute
-     * @throws IllegalArgumentException if any argument is null
-     */
     public static <T> void asTypeOf(Object injectedInstance, Class<T> clazz, Runnable action) {
 
         requireArguemntsNonNull(injectedInstance, clazz, action);
@@ -53,114 +37,114 @@ public class JPatternMatch<T> {
         }
     }
 
-    /**
-     * Init JPatternMatch for pattern matching
-     * @param injectedInstance the instance want to check for pattern matching
-     * @throws IllegalArgumentException if any argument is null
-     */
-    public static <T> JPatternMatch<T> of(Object injectedInstance) {
-
+    public static <T> JPatternMatch<T> of(T injectedInstance) {
         requireArguemntNonNull(injectedInstance);
         return new JPatternMatch<>(injectedInstance);
     }
 
-    /**
-     * Explicitly starting pattern matching
-     */
-    public JPatternMatch<T> match() {
-        return this;
-    }
-
-    /**
-     * Defined return type class
-     * @param clazz the return class
-     * @throws IllegalArgumentException if any argument is null
-     */
-    public <R> JPatternMatch<R> returnObject(Class<R> clazz) {
-        requireArguemntNonNull(clazz);
-        return new JPatternMatch<>(this.ctorInstance);
-    }
-
-    /**
-     * Defined compare condition with a runnable
-     *
-     * @param condition the condtion you want to compare with control instance
-     * @param action a runnable action to execute
-     * @throws IllegalArgumentException if any argument is null
-     */
-    public JPatternMatch<T> with(Object condition, Runnable action) {
-
-        requireArguemntsNonNull(condition, action);
-
-        if (!matched && condition.equals(this.ctorInstance)) {
-            action.run();
+    // 1. 타입을 알고 있으면서, 같은 타입에서 값을 비교하는 usecase
+    public JPatternMatch<T> with(T condition, Consumer<T> action) {
+        if (!matched && condition.equals(this.result)) {
+            action.accept(condition);
             matched = true;
         }
         return this;
     }
 
-    /**
-     * Defined return type class with a supplier
-     *
-     * @param condition the condtion you want to compare with control instance
-     * @param compareSupplier a supplier to provide the return value
-     * @throws IllegalArgumentException if any argument is null
+    /*
+     * 2. 타입을 알지 못하면서, 타입에 따라 다른 로직을 수행하는 usecase
+     *   2-1. Base 타입: Object
+     *   2-2. 타입 확인 이후 타입: 확인된 타입(Generic)
      */
-    public JPatternMatch<T> with(Object condition, Supplier<T> compareSupplier) {
-
-        requireArguemntsNonNull(condition, compareSupplier);
-
-        if (!matched && condition.equals(this.ctorInstance)) {
-            matched = true;
-            this.result = compareSupplier.get();
+    public <R> JPatternMatch<T> asTypeOf(Class<R> clazz, Consumer<R> action) {
+        if (clazz.isInstance(this.result)) {
+            action.accept(clazz.cast(this.result));
+            this.matched = true;
         }
         return this;
     }
 
-    /**
-     * End Pattern Matching with default executor
-     *
-     * @param action a runnable action to execute
-     * @throws IllegalArgumentException if any argument is null
+    /*
+     * 3. 타입을 알지 못하면서, 타입을 확인한 후 각 타입의 값을 다시 추출해서 값에 따라 다른 로직을 수행하는 usecase
+     * record Member(
+     *   String name,
+     *   long age
+     * ) { }
+     *  -> member.name == "철수"
      */
-    public void otherwise(Runnable action) {
+    public <R> void extract(Class<R> clazz, Consumer<JPatternMatchExtractExpression<R>> func) {
+        func.accept(new JPatternMatchExtractExpression<>(this.result, clazz));
+    }
+
+    public JPatternMatch<T> otherwise(Runnable action) {
 
         requireArguemntNonNull(action);
 
         if (!matched) {
             action.run();
         }
+
+        return this;
     }
 
-    /**
-     * End Pattern Matching with default return value
-     *
-     * @param supplier a supplier to provide the return value if no match was found
-     * @throws IllegalArgumentException if supplier is null
-     */
-    public T otherwise(Supplier<? extends T> supplier) {
-
-        requireArguemntNonNull(supplier);
-
-        if (this.result == null) {
-            this.result = supplier.get();
+    public void elseThrow(Throwable throwable) {
+        try {
+            if (!matched) {
+                throw throwable;
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
-        return this.result;
     }
 
-    /**
-     * End Pattern Matching with accurate result matching
-     *
-     * @return the result of pattern matching
-     * @throws PatternMatchException if no matching type was found
-     */
     public T exhaustive() throws PatternMatchException {
-        if (this.result == null || !result.getClass().equals(ctorInstance.getClass())) {
-            throw new PatternMatchException("패턴과 일치하는 타입이 없습니다.");
+        if (this.matched) {
+            return this.result;
         }
-        return this.result;
+        throw new PatternMatchException("패턴과 일치하는 타입이 없습니다.");
     }
 
 
+    static class Member {
+        String name;
+        long age;
+
+        public Member(String name, long age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+
+    public static class JPatternMatchExtractExpression<R> {
+        private final Object result;
+        private final Class<R> clazz;
+
+        JPatternMatchExtractExpression(Object result, Class<R> clazz) {
+            this.result = result;
+            this.clazz = clazz;
+        }
+
+        public void extractByField(String fieldName, Consumer<JPatternMatch<Object>> func) {
+            if (!clazz.equals(result.getClass())) {
+                throw new IllegalArgumentException("타입이 일치하지 않습니다.");
+            }
+
+            // 1. 어떤 필드에 접근할지 받은 후, 해당 필드의 값 추출
+            Field field = null;
+            try {
+                field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            }
+            Object fieldValue = null;
+            try {
+                fieldValue = field.get(this.result);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            func.accept(new JPatternMatch<>(fieldValue));
+        }
+    }
 }
 
